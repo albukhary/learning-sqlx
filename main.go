@@ -81,4 +81,28 @@ func main() {
 	err = row.Scan(&telecode)
 	fmt.Println("Telecode :", telecode)
 
+	p := Place{}
+	pp := []Place{}
+
+	// put the first row directly to p
+	err = db.Get(&p, "SELECT * FROM place LIMIT 1")
+	fmt.Println("Limit 1: ", p)
+
+	// put the places(rows) with telecode>50 into the slice pp
+	err = db.Select(&pp, "SELECT * FROM place WHERE telecode > $1", 50)
+
+	fmt.Println("Places with telecom > 50")
+	for _, place := range pp {
+		fmt.Println(place)
+	}
+
+	// they work with regular types as well
+	var id int
+	err = db.Get(&id, "SELECT count(*) FROM place")
+	fmt.Println("Count : ", id)
+
+	// fetch at most 10 places(rows)
+	var names []string
+	err = db.Select(&names, "SELECT name FROM place LIMIT 10")
+
 }
