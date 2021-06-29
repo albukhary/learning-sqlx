@@ -105,4 +105,9 @@ func main() {
 	var names []string
 	err = db.Select(&names, "SELECT name FROM place LIMIT 10")
 
+	//PREPARED statement
+	stmt, err := db.Prepare(`SELECT * FROM place WHERE telecode = $1`)
+	row = stmt.QueryRow(65)
+	fmt.Println("prepared row : ", row)
+
 }
